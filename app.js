@@ -10,9 +10,66 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+let employees = [];
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+
+inquirer
+  .prompt([
+    {
+      type: "input",
+      message: "Welcome to the Employee Template Engine. \nAs the Manager please enter your Name.",
+      name: "manager"
+    },
+    {
+      type: "input",
+      message: "What is your ID Number?",
+      name:"managerId"
+    },
+    {
+      type: "input",
+      message: "What is your Email Address?",
+      name:"managerEmail"
+    },
+    {
+      type: "input",
+      message: "What is your Office Number?",
+      name:"managerOffice"
+    }
+  ])
+  .then(function(resp){
+    const manager = new Manager (resp.name, resp.managerId, resp.managerEmail, resp.managerOffice)
+    console.log(manager)
+    console.log(manager.getRole())
+  })
+  // .prompt([
+  //   {
+  //     type: "input",
+  //     message: "What is your user name?",
+  //     name: "username"
+  //   },
+  //   {
+  //     type: "password",
+  //     message: "What is your password?",
+  //     name: "password"
+  //   },
+  //   {
+  //     type: "password",
+  //     message: "Re-enter password to confirm:",
+  //     name: "confirm"
+  //   }
+  // ])
+  // .then(function(response) {
+
+  //   if (response.confirm === response.password) {
+  //     console.log("Success!");
+  //   }
+  //   else {
+  //     console.log("You forgot your password already?!");
+  //   }
+  // });
+
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
