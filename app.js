@@ -11,11 +11,12 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 
 let employees = [];
+let testEmployee = [];
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-
-inquirer
+let manager = () => {
+  inquirer
   .prompt([
     {
       type: "input",
@@ -38,11 +39,128 @@ inquirer
       name:"managerOffice"
     }
   ])
-  .then(function(resp){
-    const manager = new Manager (resp.name, resp.managerId, resp.managerEmail, resp.managerOffice)
-    console.log(manager)
-    console.log(manager.getRole())
+  .then(function(respMan){
+    const manager = new Manager (respMan.manager, respMan.managerId, respMan.managerEmail, respMan.managerOffice);
+    employees.push(manager)
+    return engineer()
   })
+}
+
+
+var engineer = function(){
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the Name of the Engineer you wish to input?",
+        name: "engineer"
+      },
+      {
+        type: "input",
+        message: "What is the Engineer's ID Number?",
+        name: "engineerId"
+      },
+      {
+        type: "input",
+        message: "What is the Engineer's Email Address?",
+        name: "engineerEmail"
+      },
+      {
+        type: "input",
+        message: "What is the Engineer's GitHub User Name?",
+        name: "engineerGithub"
+      },
+      {
+        type: "confirm",
+        message: "Do you wish to input another Engineer?",
+        name: "engConfirm"
+      }
+    ])
+    .then(function(respEng){
+      const engineerObj = new Engineer(respEng.engineer, respEng.engineerId, respEng.engineerEmail, respEng.engineerGithub)
+
+      employees.push(engineerObj)
+      if(respEng.engConfirm){
+        return engineer()
+      }else{
+        return intern()
+      }
+    })
+
+};
+var intern = function(){
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the Name of the Intern you wish to input?",
+        name: "intern"
+      },
+      {
+        type: "input",
+        message: "What is the Intern's ID Number?",
+        name: "internId"
+      },
+      {
+        type: "input",
+        message: "What is the Intern's Email Address?",
+        name: "internEmail"
+      },
+      {
+        type: "input",
+        message: "What is the Intern's University?",
+        name: "internSchool"
+      },
+      {
+        type: "confirm",
+        message: "Do you wish to input another Intern?",
+        name: "intConfirm"
+      }
+    ])
+    .then(function(respInt){
+      const internObj = new Intern (respInt.intern, respInt.internId, respInt.internEmail, respInt.internSchool)
+
+      employees.push(internObj)
+      if(respInt.intConfirm){
+        return intern()
+      }
+      console.log(employees)
+    })
+
+};
+
+manager();
+// inquirer
+//   .prompt([
+//     {
+//       type: "input",
+//       message: "Welcome to the Employee Template Engine. \nAs the Manager please enter your Name.",
+//       name: "manager"
+//     },
+//     {
+//       type: "input",
+//       message: "What is your ID Number?",
+//       name:"managerId"
+//     },
+//     {
+//       type: "input",
+//       message: "What is your Email Address?",
+//       name:"managerEmail"
+//     },
+//     {
+//       type: "input",
+//       message: "What is your Office Number?",
+//       name:"managerOffice"
+//     }
+//   ])
+//   .then(function(resp){
+//     const manager = new Manager (resp.name, resp.managerId, resp.managerEmail, resp.managerOffice)
+//     console.log(manager);
+//     console.log(manager.getRole());
+//     employees.push(manager);
+//     engineer()
+//     console.log(testEmployee)
+//   })
   // .prompt([
   //   {
   //     type: "input",
