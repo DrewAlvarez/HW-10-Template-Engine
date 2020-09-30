@@ -37,17 +37,26 @@ let manager = () => {
       type: "input",
       message: "What is your Office Number?",
       name:"managerOffice"
+    },
+    {
+      type: "confirm",
+      message: "Would you like to input an Engineer?",
+      name: "confirm"
     }
   ])
   .then(function(respMan){
     const manager = new Manager (respMan.manager, respMan.managerId, respMan.managerEmail, respMan.managerOffice);
-    employees.push(manager)
-    return engineer()
+    employees.push(manager);
+    if(respMan.confirm){
+      return engineer();
+    }else{
+      return askIntern();
+    }
   })
 }
 
 
-var engineer = function(){
+let engineer = () => {
   inquirer
     .prompt([
       {
@@ -83,12 +92,12 @@ var engineer = function(){
       if(respEng.engConfirm){
         return engineer()
       }else{
-        return intern()
+        return askIntern()
       }
     })
 
 };
-var intern = function(){
+let intern = () => {
   inquirer
     .prompt([
       {
@@ -125,16 +134,33 @@ var intern = function(){
         return intern()
       }
       toWriteHtml();
-      //console.log(employees)
     })
 
 };
+let askIntern = () => {
+  inquirer
+  .prompt([
+    {
+      type: "confirm",
+      message: "Would you like to input an Intern?",
+      name: "confirm"
+    }
+  ])
+  .then(function(respIntConfirm){
+    if(respIntConfirm.confirm){
+      return intern()
+    }else{
+      return toWriteHtml()
+    }
+  })
+}
 
-function toWriteHtml() {
+let toWriteHtml = () => {
   if(!fs.existsSync(OUTPUT_DIR)) {
     fs.mkdirSync(OUTPUT_DIR)
   }
   fs.writeFileSync(outputPath, render(employees), "utf-8");
+  console.log("The team.html file of your team has been created, check the output folder.")
 }
 
 manager();
